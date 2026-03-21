@@ -1,9 +1,8 @@
-'''Module 3: count black and white pixels and compute the percentage of white pixels in a .jpg image and extrapolate points'''
-
 from termcolor import colored
 import cv2
 import numpy as np
 import pandas as pd
+import os
 
 filenames = [
     r"images/MASK_SK658 Slobe ch010159.jpg",
@@ -16,42 +15,100 @@ filenames = [
 
 depths = [15, 1000, 3000, 5300, 7000, 9900]
 
-# Store results directly as rows
-data = []
-
 print(colored("Processing images...", "yellow"))
 
+data = []
+
 for filename, depth in zip(filenames, depths):
-    # Load image in grayscale
-    img = cv2.imread(filename, 0)
+    if not os.path.isfile(filename):
+        print(colored(f"File not found: {filename}", "red"))
+        data.append({"Filenames": filename, "Depths": depth, "White percents": np.nan})
+        continue
+
+    # Load grayscale image
+    img = cv2.imread(filename, cv2.IMREAD_GRAYSCALE)
+    if img is None:
+        print(colored(f"Failed to load {filename}", "red"))
+        data.append({"Filenames": filename, "Depths": depth, "White percents": np.nan})
+        continue
 
     # Convert to binary
     _, binary = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
 
-    # Count pixels
-    white = np.sum(binary == 255)
-    black = np.sum(binary == 0)
+    # Compute white pixel percentage
+    white_percent = 100 * np.count_nonzero(binary) / binary.size
 
-    # Compute percentage
-    total = white + black
-    white_percent = 100 * white / total if total != 0 else 0
-
-    # Print results
     print(colored(f"{filename}:", "red"))
     print(f"{white_percent:.2f}% White | Depth: {depth} microns\n")
 
-    # Store row
     data.append({
         "Filenames": filename,
         "Depths": depth,
         "White percents": white_percent
     })
 
-# Create DataFrame and save CSV
+# Save to CSV with the new filename
 df = pd.DataFrame(data)
-df.to_csv("Percent_White_Pixels.csv", index=False)
+df.to_csv("Percent_White_Pixels_01.csv", index=False)
+print(colored("CSV file created successfully: Percent_White_Pixels_01.csv", "green"))
 
-print("CSV file created successfully.")
+
+
+
+# '''Module 3: count black and white pixels and compute the percentage of white pixels in a .jpg image and extrapolate points'''
+
+# from termcolor import colored
+# import cv2
+# import numpy as np
+# import pandas as pd
+
+# filenames = [
+#     r"images/MASK_SK658 Slobe ch010159.jpg",
+#     r"images/MASK_SK658 Slobe ch010158.jpg",
+#     r"images/MASK_SK658 Slobe ch010157.jpg",
+#     r"images/MASK_SK658 Slobe ch010156.jpg",
+#     r"images/MASK_SK658 Slobe ch010149.jpg",
+#     r"images/MASK_SK658 Slobe ch010147.jpg",
+# ]
+
+# depths = [15, 1000, 3000, 5300, 7000, 9900]
+
+# # Store results directly as rows
+# data = []
+
+# print(colored("Processing images...", "yellow"))
+
+# for filename, depth in zip(filenames, depths):
+#     # Load image in grayscale
+#     img = cv2.imread(filename, 0)
+
+#     # Convert to binary
+#     _, binary = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)
+
+#     # Count pixels
+#     white = np.sum(binary == 255)
+#     black = np.sum(binary == 0)
+
+#     # Compute percentage
+#     total = white + black
+#     white_percent = 100 * white / total if total != 0 else 0
+
+#     # Print results
+#     print(colored(f"{filename}:", "red"))
+#     print(f"{white_percent:.2f}% White | Depth: {depth} microns\n")
+
+#     # Store row
+#     data.append({
+#         "Filenames": filename,
+#         "Depths": depth,
+#         "White percents": white_percent
+#     })
+
+# # Create DataFrame and save CSV
+# df = pd.DataFrame(data)
+# df.to_csv("Percent_White_Pixels.csv", index=False)
+
+# print("CSV file created successfully.")
 
 
 
