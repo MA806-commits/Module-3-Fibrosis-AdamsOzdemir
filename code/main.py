@@ -8,12 +8,12 @@ import pandas as pd
 # Load the images you want to analyze
 
 filenames = [
-    r"images/MASK_SK658 Slobe ch010159.jpg",
-    r"images/MASK_SK658 Slobe ch010158.jpg",
-    r"images/MASK_SK658 Slobe ch010157.jpg",
-    r"images/MASK_SK658 Slobe ch010156.jpg",
-    r"images/MASK_SK658 Slobe ch010149.jpg",
-    r"images/MASK_SK658 Slobe ch010147.jpg",
+    r"Module-3-Fibrosis-AdamsOzdemir\images\MASK_SK658 Slobe ch010159.jpg",
+    r"Module-3-Fibrosis-AdamsOzdemir\images\MASK_SK658 Slobe ch010158.jpg",
+    r"Module-3-Fibrosis-AdamsOzdemir\images\MASK_SK658 Slobe ch010157.jpg",
+    r"Module-3-Fibrosis-AdamsOzdemir\images\MASK_SK658 Slobe ch010156.jpg",
+    r"Module-3-Fibrosis-AdamsOzdemir\images\MASK_SK658 Slobe ch010149.jpg",
+    r"Module-3-Fibrosis-AdamsOzdemir\images\MASK_SK658 Slobe ch010147.jpg",
 ]
 
 # Enter the depth of each image (in the same order that the images are listed above; you can find these in the .csv file provided to you which is tilted: "Filenames and Depths for Students")
